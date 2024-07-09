@@ -1,0 +1,8 @@
+name: demo
+database:
+  username: demo
+  password: demo
+  name: tenant_demo
+  host: localhost
+  port: 543
+

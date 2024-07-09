@@ -10,7 +10,7 @@ class TenantConnection extends Connection
     /**
      * @throws Exception
      */
-    public function connectToDB(string $user, string $password, string $tenant): void
+    public function connectToTenant(string $user, string $password, string $tenant): void
     {
         $this->close();
 

@@ -12,12 +12,29 @@ class BookTest extends ApiTestCase
 
         $client->request('POST', '/demo/books', [
             'headers' => [
-                'Content-Type' => 'application/ld+json'
+                'Content-Type' => 'application/json',
             ],
             'json' => [
                 'name' => 'The Lord of the Rings',
             ]
         ]);
+
+        dump($client->getResponse()->getContent());
+
+        self::assertResponseIsSuccessful();
+    }
+
+    public function testGetBook(): void
+    {
+        $client = static::createClient();
+
+        $client->request('GET', '/demo/books/5', [
+            'headers' => [
+                'Content-Type' => 'application/json'
+            ],
+        ]);
+
+        dump($client->getResponse()->getContent());
 
         self::assertResponseIsSuccessful();
     }

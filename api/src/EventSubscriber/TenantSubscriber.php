@@ -3,14 +3,14 @@
 namespace App\EventSubscriber;
 
 use Doctrine\DBAL\Exception;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 
 class TenantSubscriber implements EventSubscriberInterface
 {
     public function __construct(
-        private ContainerInterface $container,
+        private readonly EntityManagerInterface $entityManager,
     ) {
     }
 
@@ -32,10 +32,21 @@ class TenantSubscriber implements EventSubscriberInterface
 
             $tenant = 'co_' . $request->attributes->get('tenant');
 
-            dd($this->container);
+            $credentials = $this->getUserCredentials();
 
-
-            $this->connection->connectToDB('root', 'secret', $tenant);
+            $this->entityManager
+                ->getConnection()
+                ->connectToTenant($credentials['user'], $credentials['password'], $tenant);
         }
+    }
+
+    private function getUserCredentials(): array
+    {
+        // Call S3 to get the user credentials
+
+        return [
+            'user' => 'root',
+            'password' => 'secret',
+        ];
     }
 }
